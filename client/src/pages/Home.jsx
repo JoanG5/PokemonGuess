@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { getPokemon } from "../services/PokeAPI";
+import PokemonCard from "../components/PokemonCard";
 
 function Home() {
   const [pokemon, setPokemon] = useState("");
@@ -21,7 +22,6 @@ function Home() {
       const data = await getPokemon(String(pokemon).toLowerCase());
       if (data.id in guesses) return;
       guesses[data.id] = true;
-      console.log(data);
       setPokemonGuess((prevGuesses) => [...prevGuesses, data]);
 
       if (data.id === chosenPokemon.id) {
@@ -36,15 +36,22 @@ function Home() {
   return (
     <div>
       <input type="text" onChange={() => setPokemon(event.target.value)} />
-      <button onClick={() => fetchPokemon(pokemon)}>Search</button>
-      <button onClick={() => fetchPokemon(Math.floor(Math.random() * 1025))}>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => fetchPokemon(pokemon)}
+      >
+        Search
+      </button>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => fetchPokemon(Math.floor(Math.random() * 1025))}
+      >
         Random Pokemon
       </button>
       <div>
         {pokemonGuess.map((pokemon) => (
           <div key={pokemon.id}>
-            <h1>{pokemon.name}</h1>
-            <img src={pokemon.sprites.front_default} alt="pokemon" />
+            <PokemonCard pokemon={pokemon} />
           </div>
         ))}
       </div>
